@@ -28,22 +28,18 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
-        if (player == null) player = FindObjectOfType<PlayerController>();
+        if (gameManager == null)
+            gameManager = FindObjectOfType<GameManager>();
         
-        // Validar que el enemigo común esté asignado
+        if (player == null)
+            player = FindObjectOfType<PlayerController>();
+        
         if (enemyPrefab == null)
-        {
-            Debug.LogError("EnemySpawner: ¡No hay enemyPrefab asignado!");
-        }
+            Debug.LogError("EnemySpawner: No hay enemyPrefab asignado!");
 
-        // Verificar si hay mago asignado
         hasMagePrefab = magePrefab != null;
-    }
-
-    private void Start()
-    {
-        // Pool de enemigos comunes
+        
+        // Crear pools en Awake
         if (enemyPrefab != null)
         {
             commonPool = new ObjectPool<Enemy>(
@@ -55,7 +51,6 @@ public class EnemySpawner : MonoBehaviour
             );
         }
 
-        // Pool de magos (solo si está asignado)
         if (hasMagePrefab)
         {
             magePool = new ObjectPool<Enemy>(
@@ -72,7 +67,6 @@ public class EnemySpawner : MonoBehaviour
     {
         magesSpawnedThisWave = 0;
 
-        // Solo aumentar probabilidad de magos si están disponibles
         if (hasMagePrefab)
         {
             mageSpawnChance += chanceIncreasePerWave;
@@ -85,9 +79,14 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnSingleEnemy(int waveNumber)
     {
+        if (player == null)
+        {
+            Debug.LogError("EnemySpawner: Player es null, no se puede spawnear");
+            return;
+        }
+
         Vector3 spawnPos = GetRandomSpawnPosition();
 
-        // Intentar hasta 10 veces encontrar una posición válida
         int attempts = 0;
         while (Vector3.Distance(spawnPos, player.transform.position) < minDistanceFromPlayer && attempts < 10)
         {
@@ -111,24 +110,25 @@ public class EnemySpawner : MonoBehaviour
         }
 
         e.Initialize(spawnPos, player, this, waveNumber);
-
         activeEnemies++;
     }
 
     private Vector3 GetRandomSpawnPosition()
     {
+        if (spawnArea == null)
+            return transform.position;
+
         Vector2 dir = Random.insideUnitCircle.normalized;
         return spawnArea.position + (Vector3)(dir * spawnRadius);
     }
 
     public void ReturnEnemyToPool(Enemy e)
     {
+        if (e == null) return;
+
         activeEnemies--;
         gameManager.OnEnemyDefeated(e.GetCoinReward());
 
-        if (e == null) return;
-
-        // Verificar tipo de enemigo y devolverlo al pool correcto
         if (hasMagePrefab && e.CompareTag("Mage"))
             magePool.Release(e);
         else
@@ -137,25 +137,22 @@ public class EnemySpawner : MonoBehaviour
 
     private void ResetEnemy(Enemy e)
     {
-        // Resetear físicas
         Rigidbody2D rb = e.GetComponent<Rigidbody2D>();
-        if (rb != null) rb.velocity = Vector2.zero;
+        if (rb != null)
+            rb.velocity = Vector2.zero;
 
         e.gameObject.SetActive(false);
     }
 
     public int GetActiveEnemyCount() => activeEnemies;
 
-    // Debug visual
     private void OnDrawGizmosSelected()
     {
         if (spawnArea == null) return;
 
-        // Círculo de spawn
         Gizmos.color = Color.cyan;
         DrawCircle(spawnArea.position, spawnRadius, 32);
 
-        // Círculo de distancia mínima del jugador
         if (player != null)
         {
             Gizmos.color = Color.red;

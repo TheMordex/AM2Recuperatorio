@@ -95,6 +95,13 @@ public class PlayerController : MonoBehaviour
         knockbackVelocity = force;
         knockbackTimer = knockbackDuration;
     }
+    
+    public void Heal(int amount)
+    {
+        currentHealth += amount;
+        currentHealth = Mathf.Min(currentHealth, maxHealth);
+        Debug.Log($"Vida: {currentHealth}/{maxHealth}");
+    }
 
     private void Die()
     {

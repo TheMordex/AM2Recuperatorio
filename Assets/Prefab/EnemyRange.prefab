@@ -14,9 +14,11 @@ GameObject:
   - component: {fileID: 3569254343604968787}
   - component: {fileID: 7857440831520382881}
   - component: {fileID: 696703781316420839}
+  - component: {fileID: 6418064835481427250}
   - component: {fileID: 7771278468548502317}
   - component: {fileID: 4239496859771751177}
   - component: {fileID: -7702309818873126881}
+  - component: {fileID: 384089233586082262}
   m_Layer: 0
   m_Name: EnemyRange
   m_TagString: Mage
@@ -106,10 +108,7 @@ MonoBehaviour:
   baseHealth: 50
   moveSpeed: 3
   coinReward: 10
-  separationRadius: 1
-  separationStrength: 2
-  cohesionStrength: 0.4
-  alignmentStrength: 0.4
+  coinPrefab: {fileID: 0}
 --- !u!114 &3569254343604968787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +127,11 @@ MonoBehaviour:
   meleeRange: 1.3
   meleeDamage: 10
   meleeKnockback: 7
+  castSound: {fileID: 0}
+  meleeSound: {fileID: 0}
+  showRanges: 0
+  meleeColor: {r: 1, g: 0, b: 0, a: 1}
+  shootColor: {r: 0, g: 0, b: 1, a: 1}
 --- !u!58 &7857440831520382881
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -190,6 +194,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &6418064835481427250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7981899748862429643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 122af49615a0266419fdff9ff4961d73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lootTable:
+  - prefab: {fileID: 8974615926373804720, guid: 294308e4133c0554a999dc2c8e413388, type: 3}
+    dropChance: 50
+  dropForce: 5
 --- !u!95 &7771278468548502317
 Animator:
   serializedVersion: 5
@@ -235,7 +255,7 @@ AudioSource:
   m_GameObject: {fileID: 7981899748862429643}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -7357777945302849446, guid: 8d870f0bf942f4d49b35c51b4fd583fb, type: 2}
   m_audioClip: {fileID: 8300000, guid: 196effe3522c0b945b5ceb86c9e914dc, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -322,3 +342,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &384089233586082262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7981899748862429643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3144873ea4b6904bb8ab6329f5dabe5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 2
+  avoidanceRadius: 1.5
+  avoidanceForce: 1.5
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 8

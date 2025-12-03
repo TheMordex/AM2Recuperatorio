@@ -54,5 +54,4 @@ public class EnemyAnimation : MonoBehaviour
         if (footstepsAudio != null)
             footstepsAudio.Play();
     }
-
 }
