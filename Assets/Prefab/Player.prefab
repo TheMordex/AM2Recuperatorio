@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 2964229036906989771}
   - component: {fileID: 4897987573067239750}
   - component: {fileID: 3772124630359980720}
-  - component: {fileID: 6421279627276721585}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -200,7 +199,7 @@ AudioSource:
   m_GameObject: {fileID: 9045181676219459204}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -7357777945302849446, guid: 8d870f0bf942f4d49b35c51b4fd583fb, type: 2}
   m_audioClip: {fileID: 8300000, guid: 196effe3522c0b945b5ceb86c9e914dc, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -303,7 +302,7 @@ MonoBehaviour:
   damage: 15
   knockbackIntensity: 10
   attackCooldown: 0.5
-  hitAudio: {fileID: 0}
+  hitAudio: {fileID: 8300000, guid: b7077b6e05bea934f84fad7d003f93bf, type: 3}
   swingAudio: {fileID: 0}
   showAttackRange: 0
   gizmoColor: {r: 1, g: 0, b: 0, a: 1}
@@ -320,24 +319,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerAnimator: {fileID: 5865732995464147135}
-  audioSource: {fileID: 0}
---- !u!114 &6421279627276721585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9045181676219459204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf117c8bf24376146a937acefd88f70f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackSize: {x: 1.5, y: 1.5}
-  damage: 15
-  knockbackIntensity: 10
-  attackCooldown: 0.5
-  hitAudio: {fileID: 0}
-  swingAudio: {fileID: 0}
-  showAttackRange: 1
-  gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+  audioSource: {fileID: 2964229036906989771}

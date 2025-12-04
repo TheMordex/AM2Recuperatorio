@@ -108,7 +108,7 @@ MonoBehaviour:
   baseHealth: 50
   moveSpeed: 3
   coinReward: 10
-  coinPrefab: {fileID: 0}
+  coinPrefab: {fileID: 4704370459960310707, guid: e5d257798effdb54f946fe3ea23f084a, type: 3}
 --- !u!114 &3569254343604968787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,8 +127,8 @@ MonoBehaviour:
   meleeRange: 1.3
   meleeDamage: 10
   meleeKnockback: 7
-  castSound: {fileID: 0}
-  meleeSound: {fileID: 0}
+  castSound: {fileID: 8300000, guid: f3e3d271d1649124eb53f6ace4f4840b, type: 3}
+  meleeSound: {fileID: 8300000, guid: b7077b6e05bea934f84fad7d003f93bf, type: 3}
   showRanges: 0
   meleeColor: {r: 1, g: 0, b: 0, a: 1}
   shootColor: {r: 0, g: 0, b: 1, a: 1}
@@ -245,7 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 7771278468548502317}
   rb: {fileID: 696703781316420839}
-  footstepsAudio: {fileID: 5650031295129801882, guid: 3e182513ce563d64980de7f0ed9a9ff9, type: 3}
+  footstepsAudio: {fileID: -7702309818873126881}
 --- !u!82 &-7702309818873126881
 AudioSource:
   m_ObjectHideFlags: 0

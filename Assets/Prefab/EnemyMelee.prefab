@@ -108,7 +108,7 @@ MonoBehaviour:
   baseHealth: 50
   moveSpeed: 3
   coinReward: 10
-  coinPrefab: {fileID: 0}
+  coinPrefab: {fileID: 4704370459960310707, guid: e5d257798effdb54f946fe3ea23f084a, type: 3}
 --- !u!114 &1076323088908085554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
   attackCooldown: 1
   damage: 10
   knockbackForce: 20
-  attackSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: b7077b6e05bea934f84fad7d003f93bf, type: 3}
   showAttackRange: 0
   gizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!58 &7857440831520382881

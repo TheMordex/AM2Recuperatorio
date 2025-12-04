@@ -5,19 +5,25 @@ public class Coin : MonoBehaviour
 {
     [SerializeField] private int value = 1;
     [SerializeField] private AudioClip coinSound;
+    [SerializeField] private float collectAnimationDuration = 0.3f;
     
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
     private Rigidbody2D rb;
+    private Collider2D coinCollider;
     private bool picked = false;
     
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        coinCollider = GetComponent<Collider2D>();
         
         if (rb == null)
+        {
             rb = gameObject.AddComponent<Rigidbody2D>();
+            rb.gravityScale = 1f;
+        }
         
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
@@ -28,6 +34,7 @@ public class Coin : MonoBehaviour
             audioSource.clip = coinSound;
             audioSource.pitch = 0.9f + Random.Range(0f, 0.2f);
             audioSource.volume = 0.4f + Random.Range(0f, 0.2f);
+            audioSource.playOnAwake = false;
         }
     }
     
@@ -43,33 +50,77 @@ public class Coin : MonoBehaviour
     
     private void HandleCollision(GameObject collidedObject)
     {
-        if (collidedObject.CompareTag("Player") && !picked)
+        if (picked) return;
+        
+        if (collidedObject.CompareTag("Player"))
         {
-            picked = true;
-            
-            // Sumar moneda al GameManager
-            GameManager.Instance.AddCoins(value);
-            
-            // Reproducir sonido
-            if (audioSource != null && coinSound != null)
-            {
-                audioSource.Play();
-                Destroy(gameObject, coinSound.length + 0.1f);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-            
-            // Hacer invisible
-            if (spriteRenderer != null)
-                spriteRenderer.color = Color.clear;
+            CollectCoin();
         }
+    }
+    
+    private void CollectCoin()
+    {
+        picked = true;
+        
+        if (coinCollider != null)
+            coinCollider.enabled = false;
+        
+        if (rb != null)
+        {
+            rb.velocity = Vector2.zero;
+            rb.isKinematic = true;
+        }
+        
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.AddCoins(value);
+            Debug.Log($"💰 Moneda recogida: +{value}");
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ GameManager no encontrado, no se pudo sumar la moneda");
+        }
+        
+        AnimateCollection();
+        
+        if (audioSource != null && coinSound != null)
+        {
+            audioSource.Play();
+        }
+        
+        float destroyDelay = Mathf.Max(
+            collectAnimationDuration,
+            coinSound != null ? coinSound.length : 0f
+        );
+        
+        Destroy(gameObject, destroyDelay + 0.1f);
+    }
+    
+    private void AnimateCollection()
+    {
+        if (spriteRenderer == null) return;
+        
+        LeanTween.scale(gameObject, Vector3.one * 1.5f, collectAnimationDuration)
+            .setEaseOutQuad();
+        
+        LeanTween.alpha(gameObject, 0f, collectAnimationDuration)
+            .setEaseOutQuad();
+        
+        Vector3 targetPos = transform.position + Vector3.up * 0.5f;
+        LeanTween.move(gameObject, targetPos, collectAnimationDuration)
+            .setEaseOutQuad();
     }
     
     public void ApplyImpulse(Vector2 force)
     {
-        if (rb != null)
+        if (rb != null && !picked)
             rb.velocity = force;
     }
+    
+    public void SetValue(int newValue)
+    {
+        value = newValue;
+    }
+    
+    public int GetValue() => value;
 }

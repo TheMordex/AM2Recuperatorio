@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     private bool isDead = false;
 
     [Header("Knockback")]
-    [SerializeField] private float knockbackDuration = 0.25f;  // Aumentado
+    [SerializeField] private float knockbackDuration = 0.25f;
     private bool isKnockback = false;
     private float knockbackTimer = 0f;
     private Vector2 knockbackVelocity;
@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         
         currentHealth = maxHealth;
+        
+        Debug.Log($"✅ PlayerController inicializado - Vida: {currentHealth}/{maxHealth}");
     }
 
     private void Update()
@@ -78,7 +80,7 @@ public class PlayerController : MonoBehaviour
         currentHealth -= damage;
         invulnerabilityTimer = invulnerabilityTime;
 
-        Debug.Log($"Player tomó {damage} de daño. Vida: {currentHealth}/{maxHealth}");
+        Debug.Log($"💔 Player tomó {damage} de daño. Vida: {currentHealth}/{maxHealth}");
 
         if (currentHealth <= 0)
         {
@@ -100,14 +102,29 @@ public class PlayerController : MonoBehaviour
     {
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, maxHealth);
-        Debug.Log($"Vida: {currentHealth}/{maxHealth}");
+        Debug.Log($"💚 Vida: {currentHealth}/{maxHealth}");
     }
 
     private void Die()
     {
+        if (isDead) return; // ✅ Prevenir llamadas múltiples
+        
         isDead = true;
         rb.velocity = Vector2.zero;
-        Debug.Log("Player murió!");
+        
+        Debug.Log("💀 Player murió!");
+        Debug.Log($"🔴 isDead = {isDead}");
+        
+        // ✅ CRÍTICO: Notificar al GameManager directamente
+        if (GameManager.Instance != null)
+        {
+            Debug.Log("✅ Notificando a GameManager.Instance...");
+            GameManager.Instance.EndLevel(false);
+        }
+        else
+        {
+            Debug.LogError("❌ GameManager.Instance es NULL!");
+        }
     }
 
     public bool IsDead() => isDead;
