@@ -31,8 +31,6 @@ public class DefeatMenu : MonoBehaviour
         
         if (tryAgainButton != null)
             tryAgainButton.onClick.AddListener(TryAgain);
-        else
-        
 
         if (mainMenuButton != null)
             mainMenuButton.onClick.AddListener(BackToMainMenu);
@@ -61,6 +59,15 @@ public class DefeatMenu : MonoBehaviour
 
     private void TryAgain()
     {
+        if (StaminaManager.Instance != null && !StaminaManager.Instance.CanPlayLevel())
+        {
+            Debug.LogWarning("No tienes stamina suficiente para reintentar");
+            return;
+        }
+
+        if (StaminaManager.Instance != null)
+            StaminaManager.Instance.UseLevelStamina();
+
         Time.timeScale = 1f;
         
         GameState.IsDead = false;

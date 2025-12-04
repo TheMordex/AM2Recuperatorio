@@ -33,11 +33,8 @@ public class VictoryMenu : MonoBehaviour
 
     public void ShowVictoryScreen(int coinsEarned)
     {
-        
         if (victoryPanel != null)
             victoryPanel.SetActive(true);
-        else
-        
         
         if (coinsText != null)
             coinsText.text = "Monedas Obtenidas: " + coinsEarned;
@@ -47,6 +44,15 @@ public class VictoryMenu : MonoBehaviour
 
     private void PlayAgain()
     {
+        if (StaminaManager.Instance != null && !StaminaManager.Instance.CanPlayLevel())
+        {
+            Debug.LogWarning("No tienes stamina suficiente para jugar de nuevo");
+            return;
+        }
+
+        if (StaminaManager.Instance != null)
+            StaminaManager.Instance.UseLevelStamina();
+
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

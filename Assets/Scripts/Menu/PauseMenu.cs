@@ -11,7 +11,8 @@ public class PauseMenu : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] private Button pauseButton;     
     [SerializeField] private Button resumeButton;    
-    [SerializeField] private Button mainMenuButton;  
+    [SerializeField] private Button mainMenuButton;
+    [SerializeField] private Button restartButton;
 
     private AudioSource[] allAudioSources;
     private bool isPaused = false;
@@ -36,6 +37,8 @@ public class PauseMenu : MonoBehaviour
             resumeButton.onClick.AddListener(ClosePauseMenu);
         if (mainMenuButton != null)
             mainMenuButton.onClick.AddListener(BackToMainMenu);
+        if (restartButton != null)
+            restartButton.onClick.AddListener(RestartLevel);
     }
 
     public void OpenPauseMenu()
@@ -43,7 +46,6 @@ public class PauseMenu : MonoBehaviour
         if (isPaused) return;
 
         isPaused = true;
-
         
         allAudioSources = FindObjectsOfType<AudioSource>();
         foreach (var a in allAudioSources)
@@ -74,8 +76,21 @@ public class PauseMenu : MonoBehaviour
         
         if (pausePanel != null)
             pausePanel.SetActive(false);
+    }
 
-        Debug.Log("Menú de pausa cerrado");
+    private void RestartLevel()
+    {
+        if (StaminaManager.Instance != null && !StaminaManager.Instance.CanPlayLevel())
+        {
+            Debug.LogWarning("No tienes stamina suficiente para reiniciar");
+            return;
+        }
+
+        if (StaminaManager.Instance != null)
+            StaminaManager.Instance.UseLevelStamina();
+
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void BackToMainMenu()
