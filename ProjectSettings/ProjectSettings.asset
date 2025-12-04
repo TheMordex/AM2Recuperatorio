@@ -771,7 +771,8 @@ PlayerSettings:
   XboxOneOverrideIdentityName: 
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Unity Ads: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -791,11 +792,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: e1dbaac4-4bec-4f3a-8887-332834fd4650
+  cloudProjectId: 38f84055-acb7-4350-b950-d8eba5254f54
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: MobileParcial2
-  organizationId: enzo-francisco
+  organizationId: unity_51f58ae132ddbd83ce3c
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
