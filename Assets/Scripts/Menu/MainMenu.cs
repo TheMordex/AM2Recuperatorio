@@ -130,7 +130,6 @@ public class MainMenu : MonoBehaviour
         // Verificar si tiene stamina
         if (StaminaManager.Instance != null && !StaminaManager.Instance.CanPlayLevel())
         {
-            Debug.LogWarning("❌ No tienes stamina suficiente");
             return;
         }
     
@@ -168,7 +167,6 @@ public class MainMenu : MonoBehaviour
 
     private void QuitGame()
     {
-        Debug.Log("👋 Saliendo del juego...");
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class StaminaManager : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class StaminaManager : MonoBehaviour
     [Header("Stamina Settings")]
     [SerializeField] private int maxStamina = 5;
     [SerializeField] private int staminaCostPerLevel = 1;
-    [SerializeField] private float staminaRegenTime = 300f; // 5 minutos
+    [SerializeField] private float staminaRegenTime = 300f;
     
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI staminaText;
@@ -32,6 +33,37 @@ public class StaminaManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         
         LoadStamina();
+        
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "MenuScene")
+        {
+            FindUIReferences();
+            UpdateStaminaUI();
+        }
+    }
+    
+    private void FindUIReferences()
+    {
+        GameObject staminaTextObj = GameObject.Find("StaminaText");
+        if (staminaTextObj != null)
+        {
+            staminaText = staminaTextObj.GetComponent<TextMeshProUGUI>();
+        }
+        
+        GameObject staminaBarObj = GameObject.Find("StaminaBar");
+        if (staminaBarObj != null)
+        {
+            staminaBar = staminaBarObj.GetComponent<Image>();
+        }
     }
     
     private void Start()
@@ -41,7 +73,6 @@ public class StaminaManager : MonoBehaviour
     
     private void Update()
     {
-        // Regenerar stamina
         if (currentStamina < maxStamina)
         {
             staminaRegenTimer -= Time.deltaTime;
@@ -63,7 +94,6 @@ public class StaminaManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"❌ No tienes suficiente stamina. Tienes: {currentStamina}/{maxStamina}");
             return false;
         }
     }
@@ -75,7 +105,6 @@ public class StaminaManager : MonoBehaviour
             currentStamina -= staminaCostPerLevel;
             staminaRegenTimer = staminaRegenTime;
             SaveStamina();
-            Debug.Log($"⚡ Stamina gastado. Actual: {currentStamina}/{maxStamina}");
         }
     }
     
@@ -86,7 +115,6 @@ public class StaminaManager : MonoBehaviour
             currentStamina++;
             staminaRegenTimer = staminaRegenTime;
             SaveStamina();
-            Debug.Log($"✨ Stamina regenerado. Actual: {currentStamina}/{maxStamina}");
         }
     }
     

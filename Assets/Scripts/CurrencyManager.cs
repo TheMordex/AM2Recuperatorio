@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class CurrencyManager : MonoBehaviour
 {
@@ -23,6 +24,31 @@ public class CurrencyManager : MonoBehaviour
         
         LoadCoins();
         UpdateUI();
+        
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "MenuScene")
+        {
+            FindUIReferences();
+            UpdateUI();
+        }
+    }
+    
+    private void FindUIReferences()
+    {
+        GameObject coinsUI = GameObject.Find("CoinsText");
+        if (coinsUI != null)
+        {
+            coinsDisplayUI = coinsUI.GetComponent<TextMeshProUGUI>();
+        }
     }
     
     private void Start()
@@ -35,7 +61,6 @@ public class CurrencyManager : MonoBehaviour
         totalCoins += amount;
         SaveCoins();
         UpdateUI();
-        Debug.Log($"💰 Monedas añadidas: +{amount} (Total: {totalCoins})");
     }
     
     public bool RemoveCoins(int amount)
@@ -45,12 +70,10 @@ public class CurrencyManager : MonoBehaviour
             totalCoins -= amount;
             SaveCoins();
             UpdateUI();
-            Debug.Log($"💰 Monedas gastadas: -{amount} (Total: {totalCoins})");
             return true;
         }
         else
         {
-            Debug.LogWarning($"❌ No hay suficientes monedas. Tienes: {totalCoins}, necesitas: {amount}");
             return false;
         }
     }

@@ -81,7 +81,6 @@ public class EnemySpawner : MonoBehaviour
     {
         if (player == null)
         {
-            Debug.LogError("EnemySpawner: Player es null, no se puede spawnear");
             return;
         }
 

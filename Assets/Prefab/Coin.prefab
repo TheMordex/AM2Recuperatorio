@@ -368,4 +368,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 1927278891180635803}
-  offset: 10
+  offset: 1000
