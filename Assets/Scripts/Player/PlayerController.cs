@@ -1,9 +1,11 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 5f;
+    private float baseSpeed;
 
     [Header("Health")]
     [SerializeField] private int maxHealth = 100;
@@ -19,6 +21,7 @@ public class PlayerController : MonoBehaviour
     [Header("Invulnerability")]
     [SerializeField] private float invulnerabilityTime = 0.5f;
     private float invulnerabilityTimer = 0f;
+    private bool isInvulnerable = false;
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
@@ -30,6 +33,7 @@ public class PlayerController : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         
         currentHealth = maxHealth;
+        baseSpeed = moveSpeed; // Guardar velocidad base
         
         Debug.Log($"✅ PlayerController inicializado - Vida: {currentHealth}/{maxHealth}");
     }
@@ -38,16 +42,13 @@ public class PlayerController : MonoBehaviour
     {
         if (isDead) return;
 
-        // Leer input
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput.Normalize();
 
-        // Timer de invulnerabilidad
         if (invulnerabilityTimer > 0f)
             invulnerabilityTimer -= Time.deltaTime;
 
-        // Timer de knockback
         if (isKnockback)
         {
             knockbackTimer -= Time.deltaTime;
@@ -60,27 +61,24 @@ public class PlayerController : MonoBehaviour
     {
         if (isDead) return;
 
-        // Si está en knockback, aplicar velocidad de knockback con decay
         if (isKnockback)
         {
-            // Decrecer el knockback gradualmente
             knockbackVelocity = Vector2.Lerp(knockbackVelocity, Vector2.zero, 10f * Time.fixedDeltaTime);
             rb.velocity = knockbackVelocity;
             return;
         }
 
-        // Movimiento normal
         rb.velocity = moveInput * moveSpeed;
     }
 
     public void TakeDamage(int damage)
     {
-        if (isDead || invulnerabilityTimer > 0f) return;
+        if (isDead || invulnerabilityTimer > 0f || isInvulnerable) return;
 
         currentHealth -= damage;
         invulnerabilityTimer = invulnerabilityTime;
 
-        Debug.Log($"💔 Player tomó {damage} de daño. Vida: {currentHealth}/{maxHealth}");
+        Debug.Log($"🗡️ Player tomó {damage} de daño. Vida: {currentHealth}/{maxHealth}");
 
         if (currentHealth <= 0)
         {
@@ -100,6 +98,8 @@ public class PlayerController : MonoBehaviour
     
     public void Heal(int amount)
     {
+        if (isDead) return;
+        
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, maxHealth);
         Debug.Log($"💚 Vida: {currentHealth}/{maxHealth}");
@@ -107,24 +107,54 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
-        if (isDead) return; // ✅ Prevenir llamadas múltiples
+        if (isDead) return;
         
         isDead = true;
         rb.velocity = Vector2.zero;
         
         Debug.Log("💀 Player murió!");
-        Debug.Log($"🔴 isDead = {isDead}");
         
-        // ✅ CRÍTICO: Notificar al GameManager directamente
         if (GameManager.Instance != null)
         {
-            Debug.Log("✅ Notificando a GameManager.Instance...");
             GameManager.Instance.EndLevel(false);
         }
-        else
-        {
-            Debug.LogError("❌ GameManager.Instance es NULL!");
-        }
+    }
+
+    public void SetMoveSpeed(float newSpeed)
+    {
+        moveSpeed = newSpeed;
+    }
+    
+    public float GetMoveSpeed()
+    {
+        return moveSpeed;
+    }
+    
+    public void ApplySpeedBoost(float boost, float duration)
+    {
+        StartCoroutine(SpeedBoostCoroutine(boost, duration));
+    }
+    
+    private IEnumerator SpeedBoostCoroutine(float boost, float duration)
+    {
+        float boostedSpeed = baseSpeed + boost;
+        moveSpeed = boostedSpeed;
+        Debug.Log($"⚡ Velocidad: {baseSpeed} → {boostedSpeed}");
+        
+        yield return new WaitForSeconds(duration);
+        
+        moveSpeed = baseSpeed;
+        Debug.Log($"⚡ Velocidad restaurada a: {baseSpeed}");
+    }
+    
+    public void SetInvulnerable(bool invulnerable)
+    {
+        isInvulnerable = invulnerable;
+    }
+    
+    public bool IsInvulnerable()
+    {
+        return isInvulnerable;
     }
 
     public bool IsDead() => isDead;
