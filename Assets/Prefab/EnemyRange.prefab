@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseHealth: 50
   moveSpeed: 3
-  coinReward: 10
+  coinReward: 15
   coinPrefab: {fileID: 4704370459960310707, guid: e5d257798effdb54f946fe3ea23f084a, type: 3}
 --- !u!114 &3569254343604968787
 MonoBehaviour:
@@ -208,7 +208,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lootTable:
   - prefab: {fileID: 8974615926373804720, guid: 294308e4133c0554a999dc2c8e413388, type: 3}
-    dropChance: 50
+    dropChance: 0.4
+  - prefab: {fileID: 7002527490837212662, guid: 8caf4f1ee0e085e44950f39b1aed52cf, type: 3}
+    dropChance: 0.2
+  - prefab: {fileID: 798011592441037610, guid: 6de270c03fbcdfe4ba479ae796e9d464, type: 3}
+    dropChance: 0.2
+  - prefab: {fileID: 7002527490837212662, guid: 6df7f7476c83222488215991f887c93a, type: 3}
+    dropChance: 0.2
   dropForce: 5
 --- !u!95 &7771278468548502317
 Animator:

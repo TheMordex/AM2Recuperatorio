@@ -5,7 +5,7 @@ public class PlayerAttack : MonoBehaviour
 {
     [Header("Attack Settings")]
     [SerializeField] private Vector2 attackSize = new Vector2(1.5f, 1.5f);
-    [SerializeField] private int damage = 15;
+    [SerializeField] public int damage = 10;
     [SerializeField] private float knockbackIntensity = 10f;
     [SerializeField] private float attackCooldown = 0.5f;
     
