@@ -10,6 +10,7 @@ public class DefeatMenu : MonoBehaviour
     [SerializeField] private TextMeshProUGUI coinsText;
     [SerializeField] private TextMeshProUGUI waveText;
     [SerializeField] private Button tryAgainButton;
+    [SerializeField] private Button tryAgainAdsButton;
     [SerializeField] private Button mainMenuButton;
 
     private void Start()
