@@ -28,10 +28,10 @@ public class AdsManager : MonoBehaviour
 
     _rewardedAds.LoadRewardedAd();
 
-    StartCoroutine(BannerAds());
+    /*StartCoroutine(BannerAds());
 
     _interstitialAds.LoadInterstitialAd();
-    StartCoroutine(InterstitialAds());
+    StartCoroutine(InterstitialAds());*/
   }
 
   public void ShowRewardedAd(Action onAdCompleted = null)
@@ -39,7 +39,7 @@ public class AdsManager : MonoBehaviour
     _rewardedAds.ShowRewardedAd(onAdCompleted);
   }
 
-  IEnumerator BannerAds()
+  /*IEnumerator BannerAds()
   {
     while (true)
     {
@@ -56,5 +56,5 @@ public class AdsManager : MonoBehaviour
   {
     yield return new WaitForSeconds(10f);
     _interstitialAds.ShowInterstitialAd();
-  }
+  }*/
 }
