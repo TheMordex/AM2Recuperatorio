@@ -32,6 +32,9 @@ public class DefeatMenu : MonoBehaviour
         if (tryAgainButton != null)
             tryAgainButton.onClick.AddListener(TryAgain);
 
+        if (tryAgainAdsButton != null)
+            tryAgainAdsButton.onClick.AddListener(TryAgainWithAd);
+
         if (mainMenuButton != null)
             mainMenuButton.onClick.AddListener(BackToMainMenu);
     }
@@ -68,6 +71,30 @@ public class DefeatMenu : MonoBehaviour
         if (StaminaManager.Instance != null)
             StaminaManager.Instance.UseLevelStamina();
 
+        RestartGame();
+    }
+
+    private void TryAgainWithAd()
+    {
+        if (AdsManager.instance != null)
+        {
+            AdsManager.instance.ShowRewardedAd(OnAdWatchedSuccessfully);
+        }
+        else
+        {
+            Debug.LogError("AdsManager no encontrado!");
+        }
+    }
+
+    private void OnAdWatchedSuccessfully()
+    {
+        Debug.Log("¡Anuncio completado! Reiniciando sin consumir stamina...");
+        
+        RestartGame();
+    }
+
+    private void RestartGame()
+    {
         Time.timeScale = 1f;
         
         GameState.IsDead = false;

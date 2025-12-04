@@ -4882,6 +4882,7 @@ MonoBehaviour:
   pauseButton: {fileID: 439902355}
   resumeButton: {fileID: 1277316037}
   mainMenuButton: {fileID: 779591694}
+  restartButton: {fileID: 0}
 --- !u!4 &462187399
 Transform:
   m_ObjectHideFlags: 0
@@ -5711,6 +5712,7 @@ MonoBehaviour:
   pauseButton: {fileID: 439902355}
   resumeButton: {fileID: 1277316037}
   mainMenuButton: {fileID: 779591694}
+  restartButton: {fileID: 0}
 --- !u!4 &698214595 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7843255917965808942, guid: 206004ba21e3bc84faa171097172c48f, type: 3}
@@ -6117,7 +6119,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -213, y: 369}
+  m_AnchoredPosition: {x: -303.75, y: 369}
   m_SizeDelta: {x: 258.3981, y: 109.65561}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &725287990
@@ -8061,7 +8063,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 256, y: 369}
+  m_AnchoredPosition: {x: 306, y: 369}
   m_SizeDelta: {x: 258.3981, y: 109.65561}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1017579644
@@ -33718,7 +33720,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -213, y: 369}
+  m_AnchoredPosition: {x: 1, y: 369}
   m_SizeDelta: {x: 258.3981, y: 109.65561}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1575698723
@@ -61814,7 +61816,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ver anuncio para no gastar energia
+  m_text: AD
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
