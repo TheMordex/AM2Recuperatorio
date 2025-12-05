@@ -28,8 +28,7 @@ public class PlayerAnimationStuff : MonoBehaviour
     private void HandleMovementAnimation()
     {
         if (playerController == null) return;
-
-        // Obtener el input del joystick desde PlayerController
+        
         moveVector = playerController.GetMoveInput();
 
         // Guardar última dirección válida

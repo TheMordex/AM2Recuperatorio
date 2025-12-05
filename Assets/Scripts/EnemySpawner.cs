@@ -39,7 +39,6 @@ public class EnemySpawner : MonoBehaviour
 
         hasMagePrefab = magePrefab != null;
         
-        // Crear pools en Awake
         if (enemyPrefab != null)
         {
             commonPool = new ObjectPool<Enemy>(

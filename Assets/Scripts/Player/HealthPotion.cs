@@ -49,8 +49,7 @@ public class HealthPotion : MonoBehaviour
         // Reproducir sonido
         if (audioSource != null && healSound != null)
             audioSource.PlayOneShot(healSound);
-
-        // ANIMACIÓN estilo moneda
+        
         AnimateCollection();
 
         // Destruir después de animación + sonido

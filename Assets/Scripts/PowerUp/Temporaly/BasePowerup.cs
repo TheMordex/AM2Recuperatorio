@@ -8,6 +8,10 @@ public abstract class BasePowerup : MonoBehaviour
     [SerializeField] protected float effectDuration = 5f;
     [SerializeField] protected AudioClip pickupSound;
     
+    [Header("UI")]
+    [SerializeField] protected Sprite powerupIcon; 
+    [SerializeField] protected string powerupType; 
+    
     [Header("Animation")]
     [SerializeField] private float collectAnimationDuration = 0.3f;
     
@@ -25,6 +29,12 @@ public abstract class BasePowerup : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         powerupCollider = GetComponent<Collider2D>();
+        
+        if (powerupIcon == null && spriteRenderer != null)
+            powerupIcon = spriteRenderer.sprite;
+        
+        if (string.IsNullOrEmpty(powerupType))
+            powerupType = GetType().Name;
         
         if (rb == null)
         {
@@ -78,8 +88,12 @@ public abstract class BasePowerup : MonoBehaviour
             rb.isKinematic = true;
         }
         
-        // Aplicar el efecto específico del powerup
         ApplyEffect(player);
+        
+        if (PowerupUIManager.Instance != null && powerupIcon != null)
+        {
+            PowerupUIManager.Instance.AddPowerupIcon(powerupType, powerupIcon, effectDuration);
+        }
         
         if (feedbackPrefab != null)
         {
