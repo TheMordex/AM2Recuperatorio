@@ -95,12 +95,8 @@ public class RemoteConfigManager : MonoBehaviour
         if (StaminaManager.Instance != null)
         {
             StaminaManager.Instance.UpdateMaxStamina(maxStamina);
-            // Nota: Necesitarás agregar un método para actualizar staminaRegenTime en StaminaManager
             Debug.Log($"Stamina settings aplicados: Max={maxStamina}, Regen={staminaRegenTime}s");
         }
-        
-        // Aplicar velocidad al player cuando se cargue el nivel
-        // Esto se puede hacer en el Start del PlayerController
     }
     
     // Método público para refrescar config manualmente

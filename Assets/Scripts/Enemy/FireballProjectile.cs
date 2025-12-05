@@ -53,7 +53,7 @@ public class FireballProjectile : MonoBehaviour
         // zigzag con curva senoidal
         float yOffset = Mathf.Sin(t * frequency) * amplitude;
 
-        // desplazamiento lineal + zigzag (x crece con t)
+        // desplazamiento lineal + zigzag 
         Vector2 pos = new Vector2(t * frequency, yOffset);
 
         // giramos segun el ángulo
@@ -83,8 +83,7 @@ public class FireballProjectile : MonoBehaviour
             Vector2 kbDir = currentDirection;
             if (kbDir.sqrMagnitude < 0.0001f)
                 kbDir = (player.transform.position - transform.position).normalized;
-
-            // USAR EL MÉTODO ApplyKnockback del PlayerController
+            
             Vector2 knockbackForce = kbDir * knockbackAmount;
             player.ApplyKnockback(knockbackForce);
 
@@ -123,8 +122,7 @@ public class FireballProjectile : MonoBehaviour
         
         transform.rotation = Quaternion.Euler(0, 0, degrees);
     }
-
-    // También exposición opcional para configurar daño/knockback en runtime
+    
     public void SetDamage(int d) => damage = d;
     public void SetKnockback(float kb) => knockbackAmount = kb;
 }

@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    [Header("Buttons - Asignar manualmente")]
+    [Header("Buttons")]
     [SerializeField] private Button playButton;
     [SerializeField] private Button shopButton;
     [SerializeField] private Button optionsButton;
@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button backFromShopButton;
     [SerializeField] private Button backFromOptionsButton;
     
-    [Header("Panels - Buscar por nombre si están en None")]
+    [Header("Panels")]
     [SerializeField] private GameObject mainPanel;
     [SerializeField] private GameObject shopPanel;
     [SerializeField] private GameObject optionsPanel;
@@ -23,8 +23,6 @@ public class MainMenu : MonoBehaviour
         FindReferences();
         ShowMainMenu();
         SetupButtons();
-        
-        Debug.Log("✅ MainMenu inicializado");
     }
     
     private void OnEnable()
@@ -133,14 +131,12 @@ public class MainMenu : MonoBehaviour
     
     private void ShowMainMenu()
     {
-        // Asegurar que tenemos las referencias
         FindReferences();
         
         // Mostrar panel principal
         if (mainPanel != null)
             mainPanel.SetActive(true);
         else
-            Debug.LogError("❌ mainPanel es NULL!");
         
         // Ocultar otros paneles
         if (shopPanel != null)
@@ -153,7 +149,6 @@ public class MainMenu : MonoBehaviour
         if (displayInfo != null)
             displayInfo.SetActive(true);
         
-        // IMPORTANTE: Habilitar todos los botones del menú principal
         if (playButton != null)
             playButton.interactable = true;
         
@@ -166,7 +161,6 @@ public class MainMenu : MonoBehaviour
         if (quitButton != null)
             quitButton.interactable = true;
         
-        Debug.Log("🏠 Menú principal mostrado");
     }
     
     private void PlayGame()
@@ -174,12 +168,7 @@ public class MainMenu : MonoBehaviour
         if (StaminaManager.Instance != null && StaminaManager.Instance.CanPlayLevel())
         {
             StaminaManager.Instance.UseLevelStamina();
-            Debug.Log("🎮 Cargando nivel...");
             SceneManager.LoadScene("First Level");
-        }
-        else
-        {
-            Debug.LogWarning("⚠️ No hay suficiente stamina para jugar");
         }
     }
     
@@ -196,12 +185,10 @@ public class MainMenu : MonoBehaviour
         if (displayInfo != null)
             displayInfo.SetActive(true);
         
-        Debug.Log("🛒 Tienda abierta");
     }
     
     private void CloseShop()
     {
-        Debug.Log("🔙 Cerrando tienda");
         ShowMainMenu();
         SetupButtons();
     }
@@ -219,20 +206,16 @@ public class MainMenu : MonoBehaviour
         if (displayInfo != null)
             displayInfo.SetActive(false);
         
-        Debug.Log("⚙️ Opciones abiertas");
     }
     
     private void CloseOptions()
     {
-        Debug.Log("🔙 Cerrando opciones");
         ShowMainMenu();
         SetupButtons();
     }
     
     private void QuitGame()
     {
-        Debug.Log("👋 Cerrando juego");
-        
         #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
         #else
