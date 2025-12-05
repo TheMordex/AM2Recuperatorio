@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectDuration: 5
-  pickupSound: {fileID: 0}
+  pickupSound: {fileID: 8300000, guid: bf755cebf5f9dcf4ea9ff094d5f696ea, type: 3}
   collectAnimationDuration: 0.3
   feedbackPrefab: {fileID: 2348704958201194356, guid: 79fc6ef32b64c13489fdd64501bb672b, type: 3}
   speedBoost: 3
