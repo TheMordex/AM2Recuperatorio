@@ -85,12 +85,11 @@ public class EnemyMage : MonoBehaviour
 
     private void DoMelee()
     {
-        meleeTimer = shootCooldown; // Usar el mismo cooldown
+        meleeTimer = shootCooldown; 
 
         // Animación de ataque melee
         if (anim) anim.PlayAttackAnimation();
-
-        // Sonido de golpe
+        
         if (meleeSound != null && AudioManager.Instance != null)
             AudioManager.Instance.PlaySFX(meleeSound);
 

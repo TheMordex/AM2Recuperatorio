@@ -3,10 +3,10 @@ using UnityEngine;
 public class FireballProjectile : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private float angle = 0f;        // Dirección en grados (inicial)
+    [SerializeField] private float angle = 0f;       
     [SerializeField] private float amplitude = 0.5f;   // Altura del zigzag
     [SerializeField] private float frequency = 3f;     // Frecuencia del zigzag
-    [SerializeField] private float lifetime = 3f;      // Duración antes de desaparecer
+    [SerializeField] private float lifetime = 3f;      
 
     [Header("Combat")]
     [SerializeField] private int damage = 10;
@@ -97,15 +97,13 @@ public class FireballProjectile : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        // Si toca muro / layer 8 → destruir (ajustalo al layer que uses para obstáculos)
+        
         if (col.gameObject.layer == 8)
         {
             Destroy(gameObject);
         }
     }
-
-    // ---- ROTACIÓN SIMPLE EN 2D ----
+    
     private Vector2 Rotate(Vector2 v, float degrees)
     {
         float rad = degrees * Mathf.Deg2Rad;
@@ -117,15 +115,13 @@ public class FireballProjectile : MonoBehaviour
             v.x * sin + v.y * cos
         );
     }
-
-    // --- Método público para configurar el ángulo desde fuera (por EnemyMage) ---
+    
     public void SetAngle(float degrees)
     {
         angle = degrees;
         angleSetExternally = true;
-
-        // También rotamos visualmente el sprite (opcional):
-        // transform.rotation = Quaternion.Euler(0, 0, degrees);
+        
+        transform.rotation = Quaternion.Euler(0, 0, degrees);
     }
 
     // También exposición opcional para configurar daño/knockback en runtime

@@ -3,11 +3,17 @@ using System.Collections;
 
 public class DamagePowerup : BasePowerup
 {
+    [Header("Powerup UI")]
+    [SerializeField] private Sprite icon;
+
     [Header("Damage Boost")]
     [SerializeField] private int damageBoost = 10;
     
     protected override void ApplyEffect(GameObject player)
     {
+        
+        PowerupUIManager.Instance.AddPowerupIcon("Damage", icon, effectDuration);
+
         PlayerAttack playerAttack = player.GetComponent<PlayerAttack>();
         
         if (playerAttack != null)
@@ -22,14 +28,12 @@ public class DamagePowerup : BasePowerup
         int boostedDamage = originalDamage + damageBoost;
         
         playerAttack.SetDamage(boostedDamage);
-        Debug.Log($"💥 Power-up de daño activado! Daño: {originalDamage} → {boostedDamage} por {effectDuration}s");
-        
+
         yield return new WaitForSeconds(effectDuration);
         
         if (playerAttack != null)
         {
             playerAttack.SetDamage(originalDamage);
-            Debug.Log($"💥 Power-up de daño terminado. Daño restaurado a: {originalDamage}");
         }
     }
 }
