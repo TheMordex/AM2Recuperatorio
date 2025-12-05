@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02b30704ae756bf4aa267e930b0dfd17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 8
+  moveSpeed: 6
   maxHealth: 1000
   knockbackDuration: 0.15
   invulnerabilityTime: 0.5
@@ -320,3 +320,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerAnimator: {fileID: 5865732995464147135}
   audioSource: {fileID: 2964229036906989771}
+  attackButton: {fileID: 0}
