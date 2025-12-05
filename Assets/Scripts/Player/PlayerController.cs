@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
+    private FloatingJoystick joystick;
 
     private void Awake()
     {
@@ -33,13 +34,18 @@ public class PlayerController : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         
         currentHealth = maxHealth;
-        baseSpeed = moveSpeed; // Guardar velocidad base
+        baseSpeed = moveSpeed;
         
         Debug.Log($"✅ PlayerController inicializado - Vida: {currentHealth}/{maxHealth}");
     }
     
     private void Start()
     {
+        // Buscar el joystick
+        joystick = FindObjectOfType<FloatingJoystick>();
+        if (joystick == null)
+            Debug.LogError("❌ FloatingJoystick no encontrado en la escena");
+        
         // Aplicar mejoras guardadas
         if (UpgradeDataManager.Instance != null)
         {
@@ -53,8 +59,18 @@ public class PlayerController : MonoBehaviour
     {
         if (isDead) return;
 
-        moveInput.x = Input.GetAxisRaw("Horizontal");
-        moveInput.y = Input.GetAxisRaw("Vertical");
+        // Leer input del joystick
+        if (joystick != null)
+        {
+            moveInput = new Vector2(joystick.Horizontal, joystick.Vertical);
+        }
+        else
+        {
+            // Fallback a input de teclado si no hay joystick
+            moveInput.x = Input.GetAxisRaw("Horizontal");
+            moveInput.y = Input.GetAxisRaw("Vertical");
+        }
+        
         moveInput.Normalize();
 
         if (invulnerabilityTimer > 0f)
@@ -167,6 +183,8 @@ public class PlayerController : MonoBehaviour
     {
         return isInvulnerable;
     }
+
+    public Vector2 GetMoveInput() => moveInput;
 
     public bool IsDead() => isDead;
     public int GetCurrentHealth() => currentHealth;

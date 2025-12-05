@@ -49,29 +49,21 @@ public class PlayerAttack : MonoBehaviour
         if (attackTimer > 0f)
             attackTimer -= Time.deltaTime;
 
-        // Leer dirección de movimiento
+        // Leer dirección de movimiento del joystick
         UpdateMoveDirection();
-
-        // Detectar input de ataque (Space, Click izquierdo, o botón que uses)
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
-        {
-            TryAttack();
-        }
     }
 
     private void UpdateMoveDirection()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        Vector2 input = new Vector2(h, v);
+        Vector2 moveInput = playerController.GetMoveInput();
 
-        if (input.sqrMagnitude > 0.01f)
+        if (moveInput.sqrMagnitude > 0.01f)
         {
-            lastMoveDirection = input.normalized;
+            lastMoveDirection = moveInput;
         }
     }
 
-    private void TryAttack()
+    public void PerformAttackFromButton()
     {
         // Si está en cooldown o muerto, no atacar
         if (attackTimer > 0f || playerController.IsDead())

@@ -1,31 +1,39 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerAnimationStuff : MonoBehaviour
 {
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private Button attackButton;
 
-    // Sólo para animación
+    private PlayerController playerController;
     private Vector2 moveVector;
-    private Vector2 lastMoveVector = Vector2.down; // dirección inicial
+    private Vector2 lastMoveVector = Vector2.down;
+
+    private void Start()
+    {
+        playerController = GetComponent<PlayerController>();
+        
+        // Conectar botón de ataque
+        if (attackButton != null)
+            attackButton.onClick.AddListener(OnAttackButtonPressed);
+    }
 
     private void Update()
     {
         HandleMovementAnimation();
-        HandleAttackAnimation();
     }
 
     private void HandleMovementAnimation()
     {
-        // Leemos input SOLO para animación
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
-        Vector2 input = new Vector2(x, y);
+        if (playerController == null) return;
 
-        moveVector = input.normalized;
+        // Obtener el input del joystick desde PlayerController
+        moveVector = playerController.GetMoveInput();
 
-        // Guardamos última dirección válida
-        if (input.sqrMagnitude > 0.01f)
+        // Guardar última dirección válida
+        if (moveVector.sqrMagnitude > 0.01f)
         {
             lastMoveVector = moveVector;
         }
@@ -39,15 +47,17 @@ public class PlayerAnimationStuff : MonoBehaviour
         playerAnimator.SetFloat("LastVertical", lastMoveVector.y);
     }
 
-    private void HandleAttackAnimation()
+    private void OnAttackButtonPressed()
     {
         if (playerAnimator == null) return;
-
-        // Misma tecla/botón que uses para atacar en PlayerController
-        if (Input.GetButtonDown("Fire1"))
+        
+        PlayerAttack playerAttack = GetComponent<PlayerAttack>();
+        if (playerAttack != null)
         {
-            playerAnimator.SetTrigger("Attack");
+            playerAttack.PerformAttackFromButton();
         }
+
+        playerAnimator.SetTrigger("Attack");
     }
 
     // Llamado desde un Animation Event en la anim de caminar
