@@ -68,11 +68,17 @@ public class StaminaManager : MonoBehaviour
     
     private void Start()
     {
+        FindUIReferences();
         UpdateStaminaUI();
     }
     
     private void Update()
     {
+        if (staminaText == null || staminaBar == null)
+        {
+            FindUIReferences();
+        }
+        
         if (currentStamina < maxStamina)
         {
             staminaRegenTimer -= Time.deltaTime;
@@ -88,14 +94,7 @@ public class StaminaManager : MonoBehaviour
     
     public bool CanPlayLevel()
     {
-        if (currentStamina >= staminaCostPerLevel)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return currentStamina >= staminaCostPerLevel;
     }
     
     public void UseLevelStamina()
@@ -125,6 +124,25 @@ public class StaminaManager : MonoBehaviour
         PlayerPrefs.Save();
     }
     
+    public void UpdateMaxStamina(int newMax)
+    {
+        maxStamina = newMax;
+        if (currentStamina > maxStamina)
+            currentStamina = maxStamina;
+        SaveStamina();
+        UpdateStaminaUI();
+    }
+
+    public void ResetStamina()
+    {
+        currentStamina = maxStamina;
+        staminaRegenTimer = 0f;
+        PlayerPrefs.DeleteKey(STAMINA_KEY);
+        PlayerPrefs.DeleteKey(STAMINA_TIMER_KEY);
+        PlayerPrefs.Save();
+        UpdateStaminaUI();
+    }
+    
     private void LoadStamina()
     {
         currentStamina = PlayerPrefs.GetInt(STAMINA_KEY, maxStamina);
@@ -134,7 +152,7 @@ public class StaminaManager : MonoBehaviour
     private void UpdateStaminaUI()
     {
         if (staminaText != null)
-            staminaText.text = $"⚡ {currentStamina}/{maxStamina}";
+            staminaText.text = $"{currentStamina}/{maxStamina}";
         
         if (staminaBar != null)
         {

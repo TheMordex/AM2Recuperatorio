@@ -20,12 +20,27 @@ public class PlayerAttack : MonoBehaviour
     private PlayerController playerController;
     private float attackTimer = 0f;
     private Vector2 lastMoveDirection = Vector2.down;
+    private float baseKnockback;
 
     public event Action OnPlayerAttack;
 
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        baseKnockback = knockbackIntensity;
+    }
+
+    private void Start()
+    {
+        // Aplicar mejoras de daño y knockback
+        if (UpgradeDataManager.Instance != null)
+        {
+            damage += UpgradeDataManager.Instance.GetCurrentDamageBonus();
+            knockbackIntensity = baseKnockback + UpgradeDataManager.Instance.GetCurrentKnockbackBonus();
+            
+            Debug.Log($"💥 Daño aumentado a: {damage}");
+            Debug.Log($"💪 Knockback aumentado a: {knockbackIntensity}");
+        }
     }
 
     private void Update()

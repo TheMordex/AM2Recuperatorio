@@ -23,7 +23,6 @@ public class CurrencyManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         
         LoadCoins();
-        UpdateUI();
         
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -53,7 +52,16 @@ public class CurrencyManager : MonoBehaviour
     
     private void Start()
     {
+        FindUIReferences();
         UpdateUI();
+    }
+    
+    private void Update()
+    {
+        if (coinsDisplayUI == null)
+        {
+            FindUIReferences();
+        }
     }
     
     public void AddCoins(int amount)
@@ -72,10 +80,7 @@ public class CurrencyManager : MonoBehaviour
             UpdateUI();
             return true;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
     
     public int GetTotalCoins() => totalCoins;
@@ -96,7 +101,7 @@ public class CurrencyManager : MonoBehaviour
     private void UpdateUI()
     {
         if (coinsDisplayUI != null)
-            coinsDisplayUI.text = $"💰 {totalCoins}";
+            coinsDisplayUI.text = totalCoins.ToString();
     }
     
     public void ResetCoins()
@@ -105,6 +110,5 @@ public class CurrencyManager : MonoBehaviour
         PlayerPrefs.DeleteKey(COINS_KEY);
         PlayerPrefs.Save();
         UpdateUI();
-        Debug.Log("🔄 Monedas reseteadas");
     }
 }

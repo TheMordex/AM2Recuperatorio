@@ -74,11 +74,6 @@ public class Coin : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.AddCoins(value);
-            Debug.Log($"💰 Moneda recogida: +{value}");
-        }
-        else
-        {
-            Debug.LogWarning("⚠️ GameManager no encontrado, no se pudo sumar la moneda");
         }
         
         AnimateCollection();

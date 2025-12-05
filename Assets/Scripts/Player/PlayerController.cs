@@ -37,6 +37,17 @@ public class PlayerController : MonoBehaviour
         
         Debug.Log($"✅ PlayerController inicializado - Vida: {currentHealth}/{maxHealth}");
     }
+    
+    private void Start()
+    {
+        // Aplicar mejoras guardadas
+        if (UpgradeDataManager.Instance != null)
+        {
+            maxHealth += UpgradeDataManager.Instance.GetCurrentMaxHealthBonus();
+            currentHealth = maxHealth;
+            Debug.Log($"💪 Vida máxima aumentada: {maxHealth}");
+        }
+    }
 
     private void Update()
     {

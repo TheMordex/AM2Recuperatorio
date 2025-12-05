@@ -115,17 +115,17 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        
-        levelActive = false;
     
+        levelActive = false;
+
         if (victory)
         {
             GameState.IsVictorious = true;
             coinsEarned = Mathf.RoundToInt(coinsEarned * 1.5f);
-            
+        
             if (CurrencyManager.Instance != null)
                 CurrencyManager.Instance.AddCoins(coinsEarned);
-            
+        
             if (victoryMenu != null)
             {
                 victoryMenu.ShowVictoryScreen(coinsEarned);
@@ -135,10 +135,10 @@ public class GameManager : MonoBehaviour
         {
             GameState.IsDead = true;
             coinsEarned = Mathf.RoundToInt(coinsEarned * 0.5f);
-            
+        
             if (CurrencyManager.Instance != null)
                 CurrencyManager.Instance.AddCoins(coinsEarned);
-            
+        
             if (defeatMenu != null)
             {
                 defeatMenu.ShowDefeatScreen(coinsEarned, currentWave);
