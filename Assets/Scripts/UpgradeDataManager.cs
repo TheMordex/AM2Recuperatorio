@@ -33,6 +33,19 @@ public class UpgradeDataManager : MonoBehaviour
     [SerializeField] private List<int> damageBonuses = new List<int> { 5, 10, 15, 20, 25 };
     [SerializeField] private List<float> knockbackBonuses = new List<float> { 3f, 6f, 9f, 12f, 15f };
     
+    // Inicialización automática
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void InitializeManager()
+    {
+        if (Instance == null)
+        {
+            GameObject managerObj = new GameObject("UpgradeDataManager");
+            managerObj.AddComponent<UpgradeDataManager>();
+            DontDestroyOnLoad(managerObj);
+            Debug.Log("✅ UpgradeDataManager creado automáticamente al inicio");
+        }
+    }
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -45,6 +58,15 @@ public class UpgradeDataManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         
         LoadUpgradeData();
+        Debug.Log("✅ UpgradeDataManager inicializado");
+    }
+    
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
     
     public int GetMaxHealthLevel() => upgradeData.maxHealthLevel;
@@ -86,11 +108,23 @@ public class UpgradeDataManager : MonoBehaviour
         int cost = GetUpgradeCost(upgradeType);
         if (cost == -1) return false;
         
+        if (CurrencyManager.Instance == null)
+        {
+            Debug.LogError("❌ CurrencyManager.Instance es NULL en CanUpgrade!");
+            return false;
+        }
+        
         return CurrencyManager.Instance.GetTotalCoins() >= cost;
     }
     
     public bool BuyUpgrade(string upgradeType)
     {
+        if (CurrencyManager.Instance == null)
+        {
+            Debug.LogError("❌ CurrencyManager.Instance es NULL en BuyUpgrade!");
+            return false;
+        }
+        
         int cost = GetUpgradeCost(upgradeType);
         
         if (cost == -1 || !CurrencyManager.Instance.RemoveCoins(cost))
@@ -152,7 +186,11 @@ public class UpgradeDataManager : MonoBehaviour
         upgradeData = new UpgradeData();
         PlayerPrefs.DeleteKey(UPGRADE_DATA_KEY);
         PlayerPrefs.Save();
-        CurrencyManager.Instance.ResetCoins();
-        StaminaManager.Instance.ResetStamina();
+        
+        if (CurrencyManager.Instance != null)
+            CurrencyManager.Instance.ResetCoins();
+        
+        if (StaminaManager.Instance != null)
+            StaminaManager.Instance.ResetStamina();
     }
 }

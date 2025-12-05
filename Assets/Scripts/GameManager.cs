@@ -107,6 +107,7 @@ public class GameManager : MonoBehaviour
     public void OnEnemyDefeated(int coinReward)
     {
         coinsEarned += coinReward;
+        Debug.Log($"💰 Monedas por enemigo derrotado: +{coinReward}. Total en nivel: {coinsEarned}");
     }
     
     public void EndLevel(bool victory)
@@ -117,38 +118,48 @@ public class GameManager : MonoBehaviour
         }
     
         levelActive = false;
+        
+        int finalCoins = 0;
 
         if (victory)
         {
             GameState.IsVictorious = true;
-            coinsEarned = Mathf.RoundToInt(coinsEarned * 1.5f);
-        
-            if (CurrencyManager.Instance != null)
-                CurrencyManager.Instance.AddCoins(coinsEarned);
-        
-            if (victoryMenu != null)
-            {
-                victoryMenu.ShowVictoryScreen(coinsEarned);
-            }
+            finalCoins = Mathf.RoundToInt(coinsEarned * 1.5f);
+            Debug.Log($"🏆 ¡VICTORIA! Monedas ganadas: {coinsEarned} × 1.5 = {finalCoins}");
         }
         else
         {
             GameState.IsDead = true;
-            coinsEarned = Mathf.RoundToInt(coinsEarned * 0.5f);
+            finalCoins = Mathf.RoundToInt(coinsEarned * 0.5f);
+            Debug.Log($"💀 Derrota. Monedas ganadas: {coinsEarned} × 0.5 = {finalCoins}");
+        }
         
-            if (CurrencyManager.Instance != null)
-                CurrencyManager.Instance.AddCoins(coinsEarned);
+        // GUARDAR las monedas INMEDIATAMENTE
+        if (CurrencyManager.Instance != null)
+        {
+            CurrencyManager.Instance.AddCoins(finalCoins);
+            Debug.Log($"💾 Monedas guardadas en CurrencyManager. Total acumulado: {CurrencyManager.Instance.GetTotalCoins()}");
+        }
+        else
+        {
+            Debug.LogError("❌ CurrencyManager.Instance es NULL! Las monedas NO se guardaron!");
+        }
         
-            if (defeatMenu != null)
-            {
-                defeatMenu.ShowDefeatScreen(coinsEarned, currentWave);
-            }
+        // Mostrar menú correspondiente
+        if (victory && victoryMenu != null)
+        {
+            victoryMenu.ShowVictoryScreen(finalCoins);
+        }
+        else if (!victory && defeatMenu != null)
+        {
+            defeatMenu.ShowDefeatScreen(finalCoins, currentWave);
         }
     }
     
     public void AddCoins(int amount)
     {
         coinsEarned += amount;
+        Debug.Log($"💰 Monedas en nivel: {coinsEarned}");
     }
     
     public bool IsLevelActive() => levelActive;

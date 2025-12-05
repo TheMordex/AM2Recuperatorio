@@ -4,7 +4,7 @@ using TMPro;
 
 public class ShopUIManager : MonoBehaviour
 {
-    [Header("UI References")]
+    [Header("UI References - Buscar por nombre si están en None")]
     [SerializeField] private TextMeshProUGUI coinsText;
     
     [Header("Max Health Upgrade")]
@@ -29,24 +29,147 @@ public class ShopUIManager : MonoBehaviour
     
     private void Start()
     {
-        if (maxHealthBuyButton != null)
-            maxHealthBuyButton.onClick.AddListener(() => BuyUpgrade("MaxHealth"));
-        
-        if (damageBuyButton != null)
-            damageBuyButton.onClick.AddListener(() => BuyUpgrade("Damage"));
-        
-        if (knockbackBuyButton != null)
-            knockbackBuyButton.onClick.AddListener(() => BuyUpgrade("Knockback"));
-        
-        if (staminaBuyButton != null)
-            staminaBuyButton.onClick.AddListener(() => BuyUpgrade("Stamina"));
-        
+        FindReferences();
+        SetupButtons();
+        UpdateUI();
+    }
+    
+    private void OnEnable()
+    {
+        FindReferences();
+        SetupButtons();
         UpdateUI();
     }
     
     private void Update()
     {
         UpdateUI();
+    }
+    
+    private void FindReferences()
+    {
+        // Buscar CoinsText
+        if (coinsText == null)
+        {
+            GameObject coinsObj = GameObject.Find("CoinsText");
+            if (coinsObj != null)
+                coinsText = coinsObj.GetComponent<TextMeshProUGUI>();
+        }
+        
+        // Buscar botones de Max Health
+        if (maxHealthBuyButton == null)
+        {
+            GameObject btnObj = GameObject.Find("Max Health Buy Button");
+            if (btnObj != null)
+                maxHealthBuyButton = btnObj.GetComponent<Button>();
+        }
+        
+        if (maxHealthLevelText == null)
+        {
+            GameObject textObj = GameObject.Find("Max Health Level Text");
+            if (textObj != null)
+                maxHealthLevelText = textObj.GetComponent<TextMeshProUGUI>();
+        }
+        
+        if (maxHealthCostText == null)
+        {
+            GameObject textObj = GameObject.Find("Max Health Cost Text");
+            if (textObj != null)
+                maxHealthCostText = textObj.GetComponent<TextMeshProUGUI>();
+        }
+        
+        // Buscar botones de Damage
+        if (damageBuyButton == null)
+        {
+            GameObject btnObj = GameObject.Find("Damage Buy Button");
+            if (btnObj != null)
+                damageBuyButton = btnObj.GetComponent<Button>();
+        }
+        
+        if (damageLevelText == null)
+        {
+            GameObject textObj = GameObject.Find("Damage Level Text");
+            if (textObj != null)
+                damageLevelText = textObj.GetComponent<TextMeshProUGUI>();
+        }
+        
+        if (damageCostText == null)
+        {
+            GameObject textObj = GameObject.Find("Damage Cost Text");
+            if (textObj != null)
+                damageCostText = textObj.GetComponent<TextMeshProUGUI>();
+        }
+        
+        // Buscar botones de Knockback
+        if (knockbackBuyButton == null)
+        {
+            GameObject btnObj = GameObject.Find("Knockback Buy Button");
+            if (btnObj != null)
+                knockbackBuyButton = btnObj.GetComponent<Button>();
+        }
+        
+        if (knockbackLevelText == null)
+        {
+            GameObject textObj = GameObject.Find("Knockback Level Text");
+            if (textObj != null)
+                knockbackLevelText = textObj.GetComponent<TextMeshProUGUI>();
+        }
+        
+        if (knockbackCostText == null)
+        {
+            GameObject textObj = GameObject.Find("Knockback Cost Text");
+            if (textObj != null)
+                knockbackCostText = textObj.GetComponent<TextMeshProUGUI>();
+        }
+        
+        // Buscar botones de Stamina
+        if (staminaBuyButton == null)
+        {
+            GameObject btnObj = GameObject.Find("Stamina Buy Button");
+            if (btnObj != null)
+                staminaBuyButton = btnObj.GetComponent<Button>();
+        }
+        
+        if (staminaCountText == null)
+        {
+            GameObject textObj = GameObject.Find("Stamina Count Text");
+            if (textObj != null)
+                staminaCountText = textObj.GetComponent<TextMeshProUGUI>();
+        }
+        
+        if (staminaCostText == null)
+        {
+            GameObject textObj = GameObject.Find("Stamina Cost Text");
+            if (textObj != null)
+                staminaCostText = textObj.GetComponent<TextMeshProUGUI>();
+        }
+    }
+    
+    private void SetupButtons()
+    {
+        if (maxHealthBuyButton != null)
+        {
+            maxHealthBuyButton.onClick.RemoveAllListeners();
+            maxHealthBuyButton.onClick.AddListener(() => BuyUpgrade("MaxHealth"));
+        }
+        
+        if (damageBuyButton != null)
+        {
+            damageBuyButton.onClick.RemoveAllListeners();
+            damageBuyButton.onClick.AddListener(() => BuyUpgrade("Damage"));
+        }
+        
+        if (knockbackBuyButton != null)
+        {
+            knockbackBuyButton.onClick.RemoveAllListeners();
+            knockbackBuyButton.onClick.AddListener(() => BuyUpgrade("Knockback"));
+        }
+        
+        if (staminaBuyButton != null)
+        {
+            staminaBuyButton.onClick.RemoveAllListeners();
+            staminaBuyButton.onClick.AddListener(() => BuyUpgrade("Stamina"));
+        }
     }
     
     private void UpdateUI()
