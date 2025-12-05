@@ -33,7 +33,6 @@ public class UpgradeDataManager : MonoBehaviour
     [SerializeField] private List<int> damageBonuses = new List<int> { 5, 10, 15, 20, 25 };
     [SerializeField] private List<float> knockbackBonuses = new List<float> { 3f, 6f, 9f, 12f, 15f };
     
-    // Inicialización automática
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitializeManager()
     {
@@ -42,7 +41,6 @@ public class UpgradeDataManager : MonoBehaviour
             GameObject managerObj = new GameObject("UpgradeDataManager");
             managerObj.AddComponent<UpgradeDataManager>();
             DontDestroyOnLoad(managerObj);
-            Debug.Log("✅ UpgradeDataManager creado automáticamente al inicio");
         }
     }
     
@@ -58,7 +56,6 @@ public class UpgradeDataManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         
         LoadUpgradeData();
-        Debug.Log("✅ UpgradeDataManager inicializado");
     }
     
     private void OnDestroy()
@@ -109,10 +106,7 @@ public class UpgradeDataManager : MonoBehaviour
         if (cost == -1) return false;
         
         if (CurrencyManager.Instance == null)
-        {
-            Debug.LogError("❌ CurrencyManager.Instance es NULL en CanUpgrade!");
             return false;
-        }
         
         return CurrencyManager.Instance.GetTotalCoins() >= cost;
     }
@@ -120,10 +114,7 @@ public class UpgradeDataManager : MonoBehaviour
     public bool BuyUpgrade(string upgradeType)
     {
         if (CurrencyManager.Instance == null)
-        {
-            Debug.LogError("❌ CurrencyManager.Instance es NULL en BuyUpgrade!");
             return false;
-        }
         
         int cost = GetUpgradeCost(upgradeType);
         

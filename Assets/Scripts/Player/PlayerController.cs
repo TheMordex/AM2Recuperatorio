@@ -35,23 +35,22 @@ public class PlayerController : MonoBehaviour
         
         currentHealth = maxHealth;
         baseSpeed = moveSpeed;
-        
-        Debug.Log($"✅ PlayerController inicializado - Vida: {currentHealth}/{maxHealth}");
     }
     
     private void Start()
     {
-        // Buscar el joystick
         joystick = FindObjectOfType<FloatingJoystick>();
-        if (joystick == null)
-            Debug.LogError("❌ FloatingJoystick no encontrado en la escena");
         
-        // Aplicar mejoras guardadas
         if (UpgradeDataManager.Instance != null)
         {
             maxHealth += UpgradeDataManager.Instance.GetCurrentMaxHealthBonus();
             currentHealth = maxHealth;
-            Debug.Log($"💪 Vida máxima aumentada: {maxHealth}");
+        }
+        
+        if (RemoteConfigManager.Instance != null && RemoteConfigManager.Instance.IsConfigLoaded())
+        {
+            baseSpeed = RemoteConfigManager.Instance.GetPlayerMoveSpeed();
+            moveSpeed = baseSpeed;
         }
     }
 
@@ -59,14 +58,12 @@ public class PlayerController : MonoBehaviour
     {
         if (isDead) return;
 
-        // Leer input del joystick
         if (joystick != null)
         {
             moveInput = new Vector2(joystick.Horizontal, joystick.Vertical);
         }
         else
         {
-            // Fallback a input de teclado si no hay joystick
             moveInput.x = Input.GetAxisRaw("Horizontal");
             moveInput.y = Input.GetAxisRaw("Vertical");
         }
@@ -105,8 +102,6 @@ public class PlayerController : MonoBehaviour
         currentHealth -= damage;
         invulnerabilityTimer = invulnerabilityTime;
 
-        Debug.Log($"🗡️ Player tomó {damage} de daño. Vida: {currentHealth}/{maxHealth}");
-
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -129,7 +124,6 @@ public class PlayerController : MonoBehaviour
         
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, maxHealth);
-        Debug.Log($"💚 Vida: {currentHealth}/{maxHealth}");
     }
 
     private void Die()
@@ -138,8 +132,6 @@ public class PlayerController : MonoBehaviour
         
         isDead = true;
         rb.velocity = Vector2.zero;
-        
-        Debug.Log("💀 Player murió!");
         
         if (GameManager.Instance != null)
         {
@@ -166,12 +158,10 @@ public class PlayerController : MonoBehaviour
     {
         float boostedSpeed = baseSpeed + boost;
         moveSpeed = boostedSpeed;
-        Debug.Log($"⚡ Velocidad: {baseSpeed} → {boostedSpeed}");
         
         yield return new WaitForSeconds(duration);
         
         moveSpeed = baseSpeed;
-        Debug.Log($"⚡ Velocidad restaurada a: {baseSpeed}");
     }
     
     public void SetInvulnerable(bool invulnerable)

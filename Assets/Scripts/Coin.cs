@@ -71,11 +71,9 @@ public class Coin : MonoBehaviour
             rb.isKinematic = true;
         }
         
-        // AÑADIR al GameManager para el contador del nivel
         if (GameManager.Instance != null)
         {
             GameManager.Instance.AddCoins(value);
-            Debug.Log($"💰 Moneda recogida! Valor: {value}");
         }
         
         AnimateCollection();

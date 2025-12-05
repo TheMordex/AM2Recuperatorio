@@ -32,24 +32,18 @@ public class PlayerAttack : MonoBehaviour
 
     private void Start()
     {
-        // Aplicar mejoras de daño y knockback
         if (UpgradeDataManager.Instance != null)
         {
             damage += UpgradeDataManager.Instance.GetCurrentDamageBonus();
             knockbackIntensity = baseKnockback + UpgradeDataManager.Instance.GetCurrentKnockbackBonus();
-            
-            Debug.Log($"💥 Daño aumentado a: {damage}");
-            Debug.Log($"💪 Knockback aumentado a: {knockbackIntensity}");
         }
     }
 
     private void Update()
     {
-        // Actualizar timer
         if (attackTimer > 0f)
             attackTimer -= Time.deltaTime;
 
-        // Leer dirección de movimiento del joystick
         UpdateMoveDirection();
     }
 
@@ -65,51 +59,39 @@ public class PlayerAttack : MonoBehaviour
 
     public void PerformAttackFromButton()
     {
-        // Si está en cooldown o muerto, no atacar
         if (attackTimer > 0f || playerController.IsDead())
             return;
 
-        // Iniciar cooldown
         attackTimer = attackCooldown;
 
-        // Evento para animaciones
         OnPlayerAttack?.Invoke();
 
-        // Sonido de swing
         if (swingAudio != null && AudioManager.Instance != null)
             AudioManager.Instance.PlaySFX(swingAudio);
 
-        // Realizar ataque
         PerformAttack();
     }
 
     private void PerformAttack()
     {
-        // Calcular posición del ataque (delante del jugador)
         Vector2 attackPos = (Vector2)transform.position + lastMoveDirection * (attackSize.x / 2f);
 
-        // Calcular ángulo de rotación del box
         float angle = Mathf.Atan2(lastMoveDirection.y, lastMoveDirection.x) * Mathf.Rad2Deg;
 
-        // Detectar enemigos en el área de ataque
         Collider2D[] hits = Physics2D.OverlapBoxAll(attackPos, attackSize, angle);
 
         bool hitSomething = false;
 
         foreach (Collider2D hit in hits)
         {
-            // Ignorar al propio jugador
             if (hit.gameObject == gameObject)
                 continue;
 
-            // Intentar dañar enemigos con el componente Enemy
             Enemy enemy = hit.GetComponent<Enemy>();
             if (enemy != null)
             {
-                // Aplicar daño
                 enemy.TakeDamage(damage);
 
-                // Aplicar knockback
                 Vector2 knockbackDir = (hit.transform.position - transform.position).normalized;
                 enemy.ApplyKnockback(knockbackDir * knockbackIntensity, 0.2f);
 
@@ -117,14 +99,12 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        // Sonido de impacto si golpeaste algo
         if (hitSomething && hitAudio != null && AudioManager.Instance != null)
         {
             AudioManager.Instance.PlaySFX(hitAudio);
         }
     }
 
-    // Métodos públicos para upgrades/stats
     public int GetDamage() => damage;
     public void SetDamage(int dmg) => damage = dmg;
     public float GetKnockback() => knockbackIntensity;
@@ -132,7 +112,6 @@ public class PlayerAttack : MonoBehaviour
     public float GetCooldown() => attackCooldown;
     public void SetCooldown(float cd) => attackCooldown = cd;
 
-    // Debug visual en el editor
     private void OnDrawGizmos()
     {
         if (!showAttackRange) return;
@@ -141,7 +120,6 @@ public class PlayerAttack : MonoBehaviour
         
         Gizmos.color = gizmoColor;
         
-        // Dibujar el área de ataque
         Gizmos.matrix = Matrix4x4.TRS(attackPos, Quaternion.Euler(0, 0, Mathf.Atan2(lastMoveDirection.y, lastMoveDirection.x) * Mathf.Rad2Deg), Vector3.one);
         Gizmos.DrawWireCube(Vector3.zero, attackSize);
     }

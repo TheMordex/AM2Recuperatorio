@@ -11,7 +11,7 @@ public class StaminaManager : MonoBehaviour
     [Header("Stamina Settings")]
     [SerializeField] private int maxStamina = 5;
     [SerializeField] private int staminaCostPerLevel = 1;
-    [SerializeField] private float staminaRegenTime = 60f; 
+    [SerializeField] private float staminaRegenTime = 60f;
     
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI staminaText;
@@ -21,7 +21,6 @@ public class StaminaManager : MonoBehaviour
     private const string STAMINA_KEY = "CurrentStamina";
     private const string LAST_STAMINA_TIME_KEY = "LastStaminaTime";
     
-    // Inicialización automática
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitializeManager()
     {
@@ -30,7 +29,6 @@ public class StaminaManager : MonoBehaviour
             GameObject managerObj = new GameObject("StaminaManager");
             managerObj.AddComponent<StaminaManager>();
             DontDestroyOnLoad(managerObj);
-            Debug.Log("✅ StaminaManager creado automáticamente al inicio");
         }
     }
     
@@ -45,10 +43,10 @@ public class StaminaManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         
+        ApplyRemoteConfig();
         LoadStamina();
         
         SceneManager.sceneLoaded += OnSceneLoaded;
-        Debug.Log("✅ StaminaManager inicializado");
     }
     
     private void OnDestroy()
@@ -58,6 +56,15 @@ public class StaminaManager : MonoBehaviour
         if (Instance == this)
         {
             Instance = null;
+        }
+    }
+    
+    private void ApplyRemoteConfig()
+    {
+        if (RemoteConfigManager.Instance != null && RemoteConfigManager.Instance.IsConfigLoaded())
+        {
+            maxStamina = RemoteConfigManager.Instance.GetMaxStamina();
+            staminaRegenTime = RemoteConfigManager.Instance.GetStaminaRegenTime();
         }
     }
     
@@ -98,9 +105,7 @@ public class StaminaManager : MonoBehaviour
             FindUIReferences();
         }
         
-        // Verificar regeneración de stamina basada en tiempo real
         CheckStaminaRegeneration();
-        
         UpdateStaminaUI();
     }
     
@@ -109,17 +114,14 @@ public class StaminaManager : MonoBehaviour
         if (currentStamina >= maxStamina)
             return;
         
-        // Obtener el tiempo guardado de la última actualización
         string lastTimeString = PlayerPrefs.GetString(LAST_STAMINA_TIME_KEY, "");
         
         if (string.IsNullOrEmpty(lastTimeString))
         {
-            // Si no hay tiempo guardado, guardar el tiempo actual
             SaveLastStaminaTime();
             return;
         }
         
-        // Convertir el string a DateTime
         DateTime lastTime;
         if (!DateTime.TryParse(lastTimeString, out lastTime))
         {
@@ -127,24 +129,19 @@ public class StaminaManager : MonoBehaviour
             return;
         }
         
-        // Calcular cuánto tiempo ha pasado
         TimeSpan timePassed = DateTime.Now - lastTime;
         float secondsPassed = (float)timePassed.TotalSeconds;
         
-        // Calcular cuántas staminas deberían regenerarse
         int staminaToRegenerate = Mathf.FloorToInt(secondsPassed / staminaRegenTime);
         
         if (staminaToRegenerate > 0)
         {
             currentStamina = Mathf.Min(currentStamina + staminaToRegenerate, maxStamina);
             
-            // Actualizar el tiempo guardado
             DateTime newLastTime = lastTime.AddSeconds(staminaToRegenerate * staminaRegenTime);
             PlayerPrefs.SetString(LAST_STAMINA_TIME_KEY, newLastTime.ToString());
             
             SaveStamina();
-            
-            Debug.Log($"⚡ Stamina regenerada: +{staminaToRegenerate}. Actual: {currentStamina}/{maxStamina}");
         }
     }
     
@@ -160,8 +157,6 @@ public class StaminaManager : MonoBehaviour
             currentStamina -= staminaCostPerLevel;
             SaveLastStaminaTime();
             SaveStamina();
-            
-            Debug.Log($"🎮 Stamina usada: -{staminaCostPerLevel}. Actual: {currentStamina}/{maxStamina}");
         }
     }
     
@@ -184,8 +179,11 @@ public class StaminaManager : MonoBehaviour
             currentStamina = maxStamina;
         SaveStamina();
         UpdateStaminaUI();
-        
-        Debug.Log($"📈 Max Stamina actualizada a: {maxStamina}");
+    }
+    
+    public void UpdateStaminaRegenTime(float newRegenTime)
+    {
+        staminaRegenTime = newRegenTime;
     }
 
     public void ResetStamina()
@@ -196,18 +194,12 @@ public class StaminaManager : MonoBehaviour
         SaveLastStaminaTime();
         PlayerPrefs.Save();
         UpdateStaminaUI();
-        
-        Debug.Log("🔄 Stamina reseteada");
     }
     
     private void LoadStamina()
     {
         currentStamina = PlayerPrefs.GetInt(STAMINA_KEY, maxStamina);
-        
-        // Verificar regeneración al cargar
         CheckStaminaRegeneration();
-        
-        Debug.Log($"📂 Stamina cargada: {currentStamina}/{maxStamina}");
     }
     
     private void UpdateStaminaUI()
@@ -222,7 +214,6 @@ public class StaminaManager : MonoBehaviour
         }
     }
     
-    // Métodos útiles para mostrar tiempo restante
     public float GetTimeUntilNextStamina()
     {
         if (currentStamina >= maxStamina)
