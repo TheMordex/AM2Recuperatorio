@@ -12,8 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 469c24fdb3bd6431b92cc1465bd9166b, type: 3}
   m_Name: RemoteConfigDataStoreAsset
   m_EditorClassIdentifier: 
-  _rsKeyList: '[]'
-  _rsLastCachedKeyList: '[]'
+  _rsKeyList: "[\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"1309a1f7-d2d6-4934-8577-29d9e6590e05\"\r\n   
+    },\r\n    \"rs\": {\r\n      \"key\": \"maxStamina\",\r\n      \"type\": \"int\",\r\n     
+    \"value\": 5\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"f39fb467-35a1-4424-9016-a4b2f9cd044d\"\r\n    },\r\n    \"rs\": {\r\n     
+    \"key\": \"enablePowerUps\",\r\n      \"type\": \"bool\",\r\n      \"value\":
+    true\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"43a6ea42-d4e4-4a86-9730-894f9cea59d7\"\r\n   
+    },\r\n    \"rs\": {\r\n      \"key\": \"staminaRegenTime\",\r\n      \"type\":
+    \"float\",\r\n      \"value\": 60.0\r\n    }\r\n  },\r\n  {\r\n    \"metadata\":
+    {\r\n      \"entityId\": \"f8939535-d7dd-4dc2-84e6-6fe9262771ad\"\r\n    },\r\n   
+    \"rs\": {\r\n      \"key\": \"playerMoveSpeed\",\r\n      \"type\": \"float\",\r\n     
+    \"value\": 5.0\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"2c5580c6-c224-47c0-b3aa-fe951340cfb5\"\r\n    },\r\n    \"rs\": {\r\n     
+    \"key\": \"coinRewardMultiplier\",\r\n      \"type\": \"float\",\r\n      \"value\":
+    1.0\r\n    }\r\n  }\r\n]"
+  _rsLastCachedKeyList: "[\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"1309a1f7-d2d6-4934-8577-29d9e6590e05\"\r\n   
+    },\r\n    \"rs\": {\r\n      \"key\": \"maxStamina\",\r\n      \"type\": \"int\",\r\n     
+    \"value\": 5\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"f39fb467-35a1-4424-9016-a4b2f9cd044d\"\r\n    },\r\n    \"rs\": {\r\n     
+    \"key\": \"enablePowerUps\",\r\n      \"type\": \"bool\",\r\n      \"value\":
+    true\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"43a6ea42-d4e4-4a86-9730-894f9cea59d7\"\r\n   
+    },\r\n    \"rs\": {\r\n      \"key\": \"staminaRegenTime\",\r\n      \"type\":
+    \"float\",\r\n      \"value\": 60.0\r\n    }\r\n  },\r\n  {\r\n    \"metadata\":
+    {\r\n      \"entityId\": \"f8939535-d7dd-4dc2-84e6-6fe9262771ad\"\r\n    },\r\n   
+    \"rs\": {\r\n      \"key\": \"playerMoveSpeed\",\r\n      \"type\": \"float\",\r\n     
+    \"value\": 5.0\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"2c5580c6-c224-47c0-b3aa-fe951340cfb5\"\r\n    },\r\n    \"rs\": {\r\n     
+    \"key\": \"coinRewardMultiplier\",\r\n      \"type\": \"float\",\r\n      \"value\":
+    1.0\r\n    }\r\n  }\r\n]"
   _environments: "[\r\n  {\r\n    \"projectId\": \"e1dbaac4-4bec-4f3a-8887-332834fd4650\",\r\n   
     \"name\": \"production\",\r\n    \"id\": \"27403dc6-7787-4622-82c8-6e33502cedb9\",\r\n   
     \"isDefault\": true,\r\n    \"createdAt\": \"2025-11-30T11:44:08Z\",\r\n    \"updatedAt\":
