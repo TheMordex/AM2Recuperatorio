@@ -12,7 +12,6 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioMixerGroup musicGroup;
     [SerializeField] private AudioMixerGroup sfxGroup;
 
-    [Header("Sliders (autodetect)")]
     private Slider musicSlider;
     private Slider sfxSlider;
 
@@ -22,9 +21,19 @@ public class AudioManager : MonoBehaviour
     private float musicVolume = 0.8f;
     private float sfxVolume = 0.8f;
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void InitializeManager()
+    {
+        if (Instance == null)
+        {
+            GameObject managerObj = new GameObject("AudioManager");
+            managerObj.AddComponent<AudioManager>();
+            DontDestroyOnLoad(managerObj);
+        }
+    }
+
     private void Awake()
     {
-        // Singleton
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -33,46 +42,47 @@ public class AudioManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // Validar AudioMixer
-        if (audioMixer == null)
-        {
-            
-        }
-
-        // Music source
-        musicSource = gameObject.AddComponent<AudioSource>();
-        musicSource.loop = true;
-        musicSource.outputAudioMixerGroup = musicGroup;
-
-        // Reusable SFX source
-        sfxSource = gameObject.AddComponent<AudioSource>();
-        sfxSource.outputAudioMixerGroup = sfxGroup;
-
-        // Load saved volumes
-        musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.8f);
-        sfxVolume   = PlayerPrefs.GetFloat("SFXVolume", 0.8f);
-
+        CreateAudioSources();
+        LoadVolumes();
         ApplyMixerVolumes();
         
-        SceneManager.activeSceneChanged += OnSceneChanged;
-        
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void CreateAudioSources()
+    {
+        musicSource = gameObject.AddComponent<AudioSource>();
+        musicSource.loop = true;
+        musicSource.playOnAwake = false;
+        musicSource.outputAudioMixerGroup = musicGroup;
+
+        sfxSource = gameObject.AddComponent<AudioSource>();
+        sfxSource.playOnAwake = false;
+        sfxSource.outputAudioMixerGroup = sfxGroup;
+    }
+
+    private void LoadVolumes()
+    {
+        musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.8f);
+        sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.8f);
     }
 
     private void Start()
     {
-        FindSlidersInScene();
+        FindAndConnectSliders();
     }
 
-    private void OnSceneChanged(Scene oldScene, Scene newScene)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        FindSlidersInScene();
+        FindAndConnectSliders();
+        ApplyMixerVolumes();
     }
 
-    private void FindSlidersInScene()
+    private void FindAndConnectSliders()
     {
         musicSlider = GameObject.Find("SliderMusic")?.GetComponent<Slider>();
-        sfxSlider   = GameObject.Find("SliderSFX")?.GetComponent<Slider>();
-        
+        sfxSlider = GameObject.Find("SliderSFX")?.GetComponent<Slider>();
+
         if (musicSlider != null)
         {
             musicSlider.onValueChanged.RemoveAllListeners();
@@ -88,18 +98,14 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayMusic(AudioClip clip)
+    public void PlayMusic(AudioClip clip, bool forceRestart = false)
     {
-        if (musicSource == null)
-        {
+        if (musicSource == null || clip == null)
             return;
-        }
 
-        if (clip == null)
-        {
+        if (!forceRestart && musicSource.clip == clip && musicSource.isPlaying)
             return;
-        }
-        
+
         musicSource.clip = clip;
         musicSource.Play();
     }
@@ -107,28 +113,29 @@ public class AudioManager : MonoBehaviour
     public void StopMusic()
     {
         if (musicSource != null)
-        {
             musicSource.Stop();
-            Debug.Log("🔇 Música detenida");
-        }
     }
-    
+
+    public void PauseMusic()
+    {
+        if (musicSource != null && musicSource.isPlaying)
+            musicSource.Pause();
+    }
+
+    public void ResumeMusic()
+    {
+        if (musicSource != null && !musicSource.isPlaying)
+            musicSource.UnPause();
+    }
 
     public void PlaySFX(AudioClip clip)
     {
-        if (sfxSource == null)
-        {
+        if (sfxSource == null || clip == null)
             return;
-        }
-
-        if (clip == null)
-        {
-            return;
-        }
 
         sfxSource.PlayOneShot(clip);
     }
-    
+
     public void SetMusicVolume(float v)
     {
         musicVolume = Mathf.Clamp01(v);
@@ -136,8 +143,6 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.Save();
 
         ApplyMixerVolumes();
-        
-        Debug.Log($"🔊 Volumen música ajustado: {musicVolume:F2}");
     }
 
     public void SetSfxVolume(float v)
@@ -147,30 +152,29 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.Save();
 
         ApplyMixerVolumes();
-        
-        Debug.Log($"🔊 Volumen SFX ajustado: {sfxVolume:F2}");
     }
 
     private void ApplyMixerVolumes()
     {
         if (audioMixer == null)
-        {
-            Debug.LogWarning("⚠️ AudioMixer es null, no se puede aplicar volumen");
             return;
-        }
-        
+
         float musicDB = musicVolume > 0.0001f ? Mathf.Log10(musicVolume) * 20f : -80f;
         float sfxDB = sfxVolume > 0.0001f ? Mathf.Log10(sfxVolume) * 20f : -80f;
 
         audioMixer.SetFloat("MusicVolume", musicDB);
         audioMixer.SetFloat("SFXVolume", sfxDB);
     }
-    
-    private void OnDestroy()
-    {
-        SceneManager.activeSceneChanged -= OnSceneChanged;
-    }
-    
+
     public float GetMusicVolume() => musicVolume;
     public float GetSfxVolume() => sfxVolume;
+    public bool IsMusicPlaying() => musicSource != null && musicSource.isPlaying;
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        
+        if (Instance == this)
+            Instance = null;
+    }
 }
